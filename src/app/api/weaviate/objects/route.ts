@@ -26,9 +26,10 @@ export async function DELETE(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
     try {
-        const { url, apiKey, id, className, properties } = await req.json();
+        const { url, apiKey, inferenceApiKey, id, className, properties } = await req.json();
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
+        if (inferenceApiKey) headers["X-Azure-Api-Key"] = inferenceApiKey;
         
         const baseUrl = url.replace(/\/$/, "");
         
@@ -56,9 +57,10 @@ export async function PATCH(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
     try {
-        const { url, apiKey, className, properties } = await req.json();
+        const { url, apiKey, inferenceApiKey, className, properties } = await req.json();
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
+        if (inferenceApiKey) headers["X-Azure-Api-Key"] = inferenceApiKey;
         
         const baseUrl = url.replace(/\/$/, "");
         

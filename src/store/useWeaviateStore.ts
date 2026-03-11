@@ -7,15 +7,18 @@ export interface WeaviateConnection {
   name: string;
   url: string;
   apiKey: string;
+  inferenceApiKey: string;
 }
 
 interface WeaviateStore {
   url: string;
   apiKey: string;
+  inferenceApiKey: string;
   isConnected: boolean;
   connections: WeaviateConnection[];
   setUrl: (url: string) => void;
   setApiKey: (key: string) => void;
+  setInferenceApiKey: (key: string) => void;
   connect: () => Promise<boolean>;
   disconnect: () => void;
   addConnection: (conn: Omit<WeaviateConnection, 'id'>) => void;
@@ -28,14 +31,16 @@ export const useWeaviateStore = create<WeaviateStore>()(
     (set, get) => ({
       url: '',
       apiKey: '',
+      inferenceApiKey: '',
       isConnected: false,
       connections: [],
-      
+
       setUrl: (url) => set({ url }),
       setApiKey: (apiKey) => set({ apiKey }),
+      setInferenceApiKey: (inferenceApiKey) => set({ inferenceApiKey }),
       
       connect: async () => {
-        const { url, apiKey } = get();
+        const { url, apiKey, inferenceApiKey } = get();
         if (!url) return false;
         
         // Test connection via our Next.js API proxy

@@ -10,7 +10,7 @@ interface DataBrowserProps {
 }
 
 export default function DataBrowser({ className, onBack, properties }: DataBrowserProps) {
-  const { url, apiKey } = useWeaviateStore();
+  const { url, apiKey, inferenceApiKey } = useWeaviateStore();
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -133,10 +133,11 @@ export default function DataBrowser({ className, onBack, properties }: DataBrows
       const res = await fetch('/api/weaviate/objects', {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          url, 
-          apiKey, 
-          id, 
+        body: JSON.stringify({
+          url,
+          apiKey,
+          inferenceApiKey,
+          id,
           className,
           properties: editFormData
         })

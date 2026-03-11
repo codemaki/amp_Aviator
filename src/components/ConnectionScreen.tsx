@@ -4,9 +4,9 @@ import { Database, Key, Server, Loader2, Plus, Edit2, Trash2, Plug } from 'lucid
 import styles from './Connection.module.css';
 
 export default function ConnectionScreen() {
-  const { 
-    connect, setUrl, setApiKey, connections, 
-    addConnection, updateConnection, removeConnection 
+  const {
+    connect, setUrl, setApiKey, setInferenceApiKey, connections,
+    addConnection, updateConnection, removeConnection
   } = useWeaviateStore();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -15,6 +15,7 @@ export default function ConnectionScreen() {
   const [formName, setFormName] = useState('');
   const [localUrl, setLocalUrl] = useState('');
   const [localApiKey, setLocalApiKey] = useState('');
+  const [localInferenceApiKey, setLocalInferenceApiKey] = useState('');
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -31,6 +32,7 @@ export default function ConnectionScreen() {
     setFormName(conn.name);
     setLocalUrl(conn.url);
     setLocalApiKey(conn.apiKey);
+    setLocalInferenceApiKey(conn.inferenceApiKey || '');
     setError('');
   };
 
@@ -39,6 +41,7 @@ export default function ConnectionScreen() {
     setFormName('New Connection');
     setLocalUrl('');
     setLocalApiKey('');
+    setLocalInferenceApiKey('');
     setError('');
   };
 
@@ -47,9 +50,9 @@ export default function ConnectionScreen() {
     if (!formName.trim() || !localUrl.trim()) return;
     
     if (selectedId) {
-      updateConnection(selectedId, { name: formName, url: localUrl, apiKey: localApiKey });
+      updateConnection(selectedId, { name: formName, url: localUrl, apiKey: localApiKey, inferenceApiKey: localInferenceApiKey });
     } else {
-      addConnection({ name: formName, url: localUrl, apiKey: localApiKey });
+      addConnection({ name: formName, url: localUrl, apiKey: localApiKey, inferenceApiKey: localInferenceApiKey });
       // The newest connection will be at the end. We might want to select it, 
       // but without its ID it's tricky. Zustand's return could provide it, or we rely on the user to click it.
       // For now, we just let it add, and maybe reset form.
@@ -75,6 +78,7 @@ export default function ConnectionScreen() {
     // Update store immediately for the connection attempt
     setUrl(localUrl);
     setApiKey(localApiKey);
+    setInferenceApiKey(localInferenceApiKey);
     
     const success = await connect();
     if (!success) {
@@ -173,6 +177,20 @@ export default function ConnectionScreen() {
                   placeholder="Enter API Key"
                   value={localApiKey}
                   onChange={(e) => setLocalApiKey(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="inferenceApiKey">Inference API Key (Optional)</label>
+              <div className={styles.inputWrapper}>
+                <Key className={styles.inputIcon} size={18} />
+                <input
+                  id="inferenceApiKey"
+                  type="password"
+                  placeholder="Azure / OpenAI API Key for vectorization"
+                  value={localInferenceApiKey}
+                  onChange={(e) => setLocalInferenceApiKey(e.target.value)}
                 />
               </div>
             </div>
