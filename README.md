@@ -2,6 +2,32 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Docker Compose로 실행 (권장)
+
+Docker와 Docker Compose가 설치되어 있다면 아래 명령어 하나로 실행할 수 있습니다.
+
+```bash
+docker-compose up --build
+```
+
+빌드 완료 후 [http://localhost:3030](http://localhost:3030) 에서 확인하세요.
+
+백그라운드로 실행하려면:
+
+```bash
+docker-compose up --build -d
+```
+
+종료하려면:
+
+```bash
+docker-compose down
+```
+
+---
+
+### 로컬 개발 서버로 실행
+
 First, run the development server:
 
 ```bash
